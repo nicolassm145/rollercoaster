@@ -57,7 +57,7 @@ int menuEscolhaMassa(double massas[], int num_opcoes)
 
 int main()
 {
-    double massa_inicial, velocidade_inicial, altura_ini, massa_atual, velocidade_atual, massaCerta;
+    double massa_inicial, velocidade_inicial, altura_ini, massa_atual, velocidade_atual, massaCerta, distanciaFreio;
     double alturas[3] = {5.0, 10.0, 15.0}; // Alturas para cada trecho
     int num_trechos = 3;
 
@@ -70,42 +70,57 @@ int main()
 
     massa_atual = massa_inicial * 0.75; // Massa inicial ajustada
     velocidade_atual = (massa_inicial * velocidade_inicial) / massa_atual;
+    distanciaFreio = 3 * altura_ini; // Distância de frenagem
 
     for (int i = 0; i < num_trechos; i++)
+{
+    printf("\nTrecho %d\n", i + 1);
+    printf("Velocidade atual: %.2f m/s\n", velocidade_atual);
+    printf("Massa atual: %.2f kg\n", massa_atual);
+    printf("Altura atual: %.2f m\n", alturas[i]);
+    printf("Energia Cinética: %.2f J\n", energiaCinetica(massa_atual, velocidade_atual));
+    printf("Energia Potencial: %.2f J\n", energiaPotencial(massa_atual, alturas[i]));
+
+    // Define a massa necessária para alcançar o topo da próxima seção
+    massaCerta = massaNecessaria(massa_atual, altura_ini, alturas[i]);
+
+    // Define opções de massa (2 maiores, 2 menores, e a massa certa)
+    double massas[5] = {massaCerta * 1.3, massaCerta * 1.1, massaCerta, massaCerta * 0.9, massaCerta * 0.7};
+
+    // Embaralha as opções de massa
+    shuffle(massas, 5);
+
+    // Mostra o menu e obtém a escolha do usuário
+    int escolha = menuEscolhaMassa(massas, 5);
+
+    // Verifica se a escolha foi correta
+    if (fabs(massas[escolha] - massaCerta) > massaCerta * 0.1)
     {
-        printf("\nTrecho %d\n", i + 1);
-
-        // Define a massa necessária para alcançar o topo da próxima seção
-        massaCerta = massaNecessaria(massa_atual, altura_ini, alturas[i]);
-
-        // Define opções de massa (2 maiores, 2 menores, e a massa certa)
-        double massas[5] = {massaCerta * 1.3, massaCerta * 1.1, massaCerta, massaCerta * 0.9, massaCerta * 0.7};
-
-        // Embaralha as opções de massa
-        shuffle(massas, 5);
-
-        // Mostra o menu e obtém a escolha do usuário
-        int escolha = menuEscolhaMassa(massas, 5);
-
-        // Verifica se a escolha foi correta
-        if (fabs(massas[escolha] - massaCerta) > massaCerta * 0.1)
+        if (massas[escolha] > massaCerta)
         {
-            if (massas[escolha] > massaCerta)
-            {
-                printf("Fim de jogo! Pulou para fora do trilho.\n");
-            }
-            else
-            {
-                printf("Fim de jogo! Não conseguiu subir os trilhos.\n");
-            }
-            return 0;
+            printf("Fim de jogo! Pulou para fora do trilho.\n");
         }
         else
         {
-            massa_atual = massas[escolha];
-            printf("Massa correta! Continuação para o próximo trecho.\n");
+            printf("Fim de jogo! Não conseguiu subir os trilhos.\n");
         }
+        return 0;
     }
+    else
+    {
+        massa_atual = massas[escolha];
+        printf("Massa correta! Continuação para o próximo trecho.\n");
+
+        // Calcula a energia total no início do trecho
+        double energia_total = energiaCinetica(massa_atual, velocidade_atual) + energiaPotencial(massa_atual, altura_ini);
+
+        // Atualiza a velocidade com base na energia total e na altura atual
+        velocidade_atual = velocidadeNoPonto(energia_total, massa_atual, alturas[i]);
+    }
+}
+
+
+
 
     printf("Parabéns! Você completou o passeio na montanha-russa.\n");
     return 0;
