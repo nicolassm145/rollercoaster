@@ -1,16 +1,14 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <locale.h>
 
 #define g 10
 
-void shuffle(double *array, size_t n)
-{
-    if (n > 1)
-    {
+void shuffle(double *array, size_t n) {
+    if (n > 1) {
         size_t i;
-        for (i = 0; i < n - 1; i++)
-        {
+        for (i = 0; i < n - 1; i++) {
             size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
             double t = array[j];
             array[j] = array[i];
@@ -19,63 +17,58 @@ void shuffle(double *array, size_t n)
     }
 }
 
-double energiaCinetica(double massa, double velocidade)
-{
+double energiaCinetica(double massa, double velocidade) {
     return 0.5 * massa * velocidade * velocidade;
 }
 
-double energiaPotencial(double massa, double altura)
-{
+double energiaPotencial(double massa, double altura) {
     return massa * g * altura;
 }
 
-double massaNecessaria(double massa, double altura1, double altura2)
-{
+double massaNecessaria(double massa, double altura1, double altura2) {
     return (massa * altura1) / altura2;
 }
 
-double velocidadeNoPonto(double energia_total, double massa, double altura)
-{
+double velocidadeNoPonto(double energia_total, double massa, double altura) {
     double energia_pot = energiaPotencial(massa, altura);
     if (energia_total < energia_pot)
         return 0;
     return sqrt(2 * (energia_total - energia_pot) / massa);
 }
 
-int menuEscolhaMassa(double massas[], int num_opcoes)
-{
+int menuEscolhaMassa(double massas[], int num_opcoes) {
     int opcao;
-    printf("Escolha a massa para o proximo trecho:\n");
-    for (int i = 0; i < num_opcoes; i++)
-    {
+    printf("Escolha a massa para o próximo trecho:\n");
+    for (int i = 0; i < num_opcoes; i++) {
         printf("%d. %.2f kg\n", i + 1, massas[i]);
     }
-    printf("Escolha uma opcao (1 a %d): ", num_opcoes);
+    printf("Escolha uma opção (1 a %d): ", num_opcoes);
     scanf("%d", &opcao);
     return opcao - 1;
 }
 
-int main()
-{
+int main() {
+    setlocale(LC_ALL, "portuguese");
     double massa_inicial, velocidade_inicial, altura_ini, massa_atual, velocidade_atual, massaCerta;
-    double alturas[3] = {5.0, 10.0, 15.0}; // Alturas para cada trecho
     int num_trechos = 3;
 
     printf("Digite a massa do carrinho em movimento (kg): ");
     scanf("%lf", &massa_inicial);
     printf("Velocidade do carrinho em movimento: ");
     scanf("%lf", &velocidade_inicial);
-    printf("Altura inicial referencial: ");
+    printf("Altura inicial de referência (h): ");
     scanf("%lf", &altura_ini);
 
-    massa_atual = massa_inicial * 0.75; // Massa inicial ajustada
+    // Alturas definidas para cada trecho
+    double alturas[3] = {5.0 * altura_ini / 4, 3.0 * altura_ini / 4, altura_ini / 2};  // Alturas para os trechos A-B-C, C-D-E, e E-F-G
+
+    massa_atual = massa_inicial * 0.75;  // Massa inicial ajustada
     velocidade_atual = (massa_inicial * velocidade_inicial) / massa_atual;
 
-    for (int i = 0; i < num_trechos; i++)
-    {
+    for (int i = 0; i < num_trechos; i++) {
         printf("\nTrecho %d\n", i + 1);
 
-        // Define a massa necessária para alcançar o topo da próxima seção
+        // Calcula a massa necessária para alcançar o topo da próxima seção
         massaCerta = massaNecessaria(massa_atual, altura_ini, alturas[i]);
 
         // Define opções de massa (2 maiores, 2 menores, e a massa certa)
@@ -88,20 +81,14 @@ int main()
         int escolha = menuEscolhaMassa(massas, 5);
 
         // Verifica se a escolha foi correta
-        if (fabs(massas[escolha] - massaCerta) > massaCerta * 0.1)
-        {
-            if (massas[escolha] > massaCerta)
-            {
+        if (fabs(massas[escolha] - massaCerta) > massaCerta * 0.1) {
+            if (massas[escolha] > massaCerta) {
                 printf("Fim de jogo! Pulou para fora do trilho.\n");
-            }
-            else
-            {
+            } else {
                 printf("Fim de jogo! Não conseguiu subir os trilhos.\n");
             }
             return 0;
-        }
-        else
-        {
+        } else {
             massa_atual = massas[escolha];
             printf("Massa correta! Continuação para o próximo trecho.\n");
         }
