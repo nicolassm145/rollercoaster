@@ -11,10 +11,8 @@ double energiaPotencial(double massa, double altura) {
     return massa * g * altura;
 }
 
-double massaNecessaria(double massa, double altura1, double altura2){
-    double massa2;
-    massa2 = (massa*altura1)/altura2;
-    return massa2;
+double massaNecessaria(double massa, double altura1, double altura2) {
+    return (massa * altura1) / altura2;
 }
 
 double velocidadeNoPonto(double energia_total, double massa, double altura) {
@@ -24,65 +22,54 @@ double velocidadeNoPonto(double energia_total, double massa, double altura) {
     return sqrt(2 * (energia_total - energia_pot) / massa);
 }
 
-void alterar_massa(double *massa_atual, double massaCerta, int opcao) {
-    if (opcao == 1) {
-        *massa_atual = massaCerta * 1.10; // Aumenta 10%
-        printf("Alerar massa para: %.2f kg\n", *massa_atual);
-    } else if (opcao == 2) {
-        *massa_atual = massaCerta * 0.90; // Diminui 10%
-        printf("Alerar massa para: %.2f kg\n", *massa_atual);
-    } else if (opcao == 3) {
-        *massa_atual = massaCerta * 1.20; // Aumenta 20%
-        printf("Alerar massa para: %.2f kg\n", *massa_atual);
-    } else if (opcao == 4) {
-        *massa_atual = massaCerta * 0.80; // Diminui 20%
-        printf("Alerar massa para: %.2f kg\n", *massa_atual);
-    } else {
-        printf("Opção inválida.\n");
-    }
-}
-
-int mostrar_menu() {
+int menuEscolhaMassa(double massas[], int num_opcoes) {
     int opcao;
-    printf("\nMenu de Opções:\n");
-    printf("1. Alerar massa para %%\n");
-    printf("2. aletrar massa para%%\n");
-    printf("3. Continuar sem alterar a massa\n");
-    printf("Escolha uma opção: ");
+    printf("Escolha a massa para o proximo trecho:\n");
+    for (int i = 0; i < num_opcoes; i++) {
+        printf("%d. %.2f kg\n", i + 1, massas[i]);
+    }
+    printf("Escolha uma opcao (1 a %d): ", num_opcoes);
     scanf("%d", &opcao);
-    return opcao;
+    return opcao - 1;
 }
 
 int main() {
-    double massa_inicial, velocidade_inicial, altura_ini, altura_bc, altura_cd, energia_total, massa_atual, velocidade_atual, massaCerta;
-    int opcao;
+    double massa_inicial, velocidade_inicial, altura_ini, massa_atual, velocidade_atual, massaCerta;
+    double alturas[3] = {5.0, 10.0, 15.0};  // Alturas para cada trecho
+    int num_trechos = 3;
 
-    printf("Digite a massa do carrinho em movimento(kg): ");
+    printf("Digite a massa do carrinho em movimento (kg): ");
     scanf("%lf", &massa_inicial);
-
     printf("Velocidade do carrinho em movimento: ");
     scanf("%lf", &velocidade_inicial);
-
     printf("Altura inicial referencial: ");
     scanf("%lf", &altura_ini);
 
-    massa_atual = massa_inicial*0.75;
-    massaCerta = massaNecessaria(massa_atual, altura_ini, altura_ini*5/4);
+    massa_atual = massa_inicial * 0.75;  // Massa inicial ajustada
+    velocidade_atual = (massa_inicial * velocidade_inicial) / massa_atual;
 
-    velocidade_atual = (massa_inicial*velocidade_inicial)/(massa_atual);
+    for (int i = 0; i < num_trechos; i++) {
+        printf("\nTrecho %d\n", i + 1);
 
-    energia_total = energiaCinetica(massa_atual, velocidade_atual) + energiaPotencial(massa_atual, altura_ini);
+        // Define a massa necessária para alcançar o topo da próxima seção
+        massaCerta = massaNecessaria(massa_atual, altura_ini, alturas[i]);
 
+        // Define opções de massa (2 maiores, 2 menores, e a massa certa)
+        double massas[5] = {massaCerta * 1.3, massaCerta * 1.1, massaCerta, massaCerta * 0.9, massaCerta * 0.7};
 
-    velocidade_atual = velocidade_atual + velocidadeNoPonto(energia_total, massa_atual, altura_ini);
+        // Mostra o menu e obtém a escolha do usuário
+        int escolha = menuEscolhaMassa(massas, 5);
 
-    printf("A velocidade atual é: %lf\n", velocidade_atual);
-    printf("A massa necessaria para conseguir subir é: %lf\n", massaCerta);
-
-    opcao = mostrar_menu();
-    if (opcao != 3) {
-        alterar_massa(&massa_atual, massaCerta, opcao);
+        // Verifica se a escolha foi correta
+        if (fabs(massas[escolha] - massaCerta) > massaCerta * 0.1) {
+            printf("Fim de jogo! Massa incorreta.\n");
+            return 0;
+        } else {
+            massa_atual = massas[escolha];
+            printf("Massa correta! Continuação para o próximo trecho.\n");
+        }
     }
 
+    printf("Parabéns! Você completou o passeio na montanha-russa.\n");
     return 0;
 }
