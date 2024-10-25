@@ -81,7 +81,7 @@ int main()
     printf("Altura inicial referencial: ");
     scanf("%lf", &altura_ini);
 
-    massa_atual = massa_inicial * 0.75;
+    massa_atual = massa_inicial * 1.25;
     massaCerta = massaNecessaria(massa_atual, altura_ini, altura_ini * 5 / 4);
 
     velocidade_atual = (massa_inicial * velocidade_inicial) / (massa_atual);
