@@ -72,7 +72,7 @@ int main(void)
 {
     float massa_atual, massa_inicial, velocidade_inicial, altura_ini;
     int num_trechos = 9; // Numero de trechos
-    char trecho_nomes[] = {"A-B", "B-C", "C-D", "D-E", "E-F", "F-G", "G-H", "H-I", "I (final)"};
+    const char *trecho_nomes[] = {"A-B", "B-C", "C-D", "D-E", "E-F", "F-G", "G-H", "H-I", "I (final)"};
 
     // Solicita a altura inicial do usuario
     printf("Digite a altura inicial em metros: ");
