@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 #define GRAVIDADE 10.0
 
 // Funções auxiliares
@@ -12,6 +14,25 @@ double calcularVelocidadeFinalM2(double M1, double M2, double V) {
 
 double calcularMassaAjustada(double energiaCinInicial, double altura) {
     return energiaCinInicial / (GRAVIDADE * altura);
+}
+
+// Função para calcular o coeficiente de atrito
+double calcularCoeficienteAtrito(double energiaDissipada, double massa) {
+    double forcaResistencia = energiaDissipada;
+    double forcaNormal = massa * GRAVIDADE;
+    return forcaResistencia / forcaNormal;
+}
+
+// Função para verificar a massa escolhida pelo usuario
+int verificarMassaEscolhida(double massaCorreta, double massaEscolhida) {
+    double erro = 0.1 * massaCorreta;
+    if (massaEscolhida >= massaCorreta - erro && massaEscolhida <= massaCorreta + erro) {
+        printf("A massa foi ajustada para o valor correto: %.2f kg\n\n", massaCorreta);
+        return 1; // Massa correta dentro de 10% de erro
+    } else {
+        printf("Erro! A massa escolhida esta fora do limite permitido.\nJogo encerrado.\n\n");
+        return 0; // Massa incorreta
+    }
 }
 
 int main() {
@@ -38,13 +59,13 @@ int main() {
         altura_ini * 3 / 8              // hI = H/8
     };
 
-    // 1. Colisão elástica no ponto A
+    // 1. Colisao elastica no ponto A
     M2 = 1.25 * M;
     v_f = calcularVelocidadeFinalM1(M, M2, V);
     v_2f = calcularVelocidadeFinalM2(M, M2, V);
 
-    // 2. Energia total no ponto B (pós-colisão)
-    double energiaCinB = 0.5 * M * v_2f * v_2f; // Energia cinética em B
+    // 2. Energia total no ponto B (pos-colisao)
+    double energiaCinB = 0.5 * M * v_2f * v_2f; // Energia cinetica em B
     double energiaPotB = M2 * GRAVIDADE * altura_ini; // Energia potencial em B
     double energiaTotalB = energiaCinB + energiaPotB;
 
@@ -52,40 +73,61 @@ int main() {
         printf("Altura %c: %.2f m\n", 'A' + i, alturas[i]);
     }
 
-    printf("Energia cinética no ponto B: %.2f J\n", energiaCinB);
+    printf("Energia cinetica no ponto B: %.2f J\n", energiaCinB);
     printf("Energia potencial no ponto B: %.2f J\n", energiaPotB);
     printf("Energia total no ponto B: %.2f J\n\n", energiaTotalB);
 
-    // 3. Cálculo de massa ajustada para subida de A a C
+    // 3. Calculo de massa ajustada para subida de A a C
     M2 = calcularMassaAjustada(energiaTotalB, alturas[2]);
-    printf("Massa ajustada para alcançar o ponto C (%.2f): %.2f kg\n\n", alturas[2], M2);
+    printf("Massa ajustada para alcancar o ponto C (%.2f): %.2f kg\n\n", alturas[2], M2);
 
-    // 4. Dissipação de energia de C a D para atingir energia necessária em D
-    double alturaE = alturas[5]; // Altura do ponto E
-    double energiaFinalD = M2 * GRAVIDADE * alturaE; // Energia necessária no ponto D para atingir E
-    printf("Energia necessária no ponto D para alcançar o ponto E: %.2f J\n\n", energiaFinalD);
+    // Entrada da massa escolhida pelo jogador no ponto B
+    double massaEscolhidaB;
+    printf("Escolha a massa para o ponto B (intervalo permitido: %.2f kg a %.2f kg): ",
+           M2 * 0.7, M2 * 1.3);
+    scanf("%lf", &massaEscolhidaB);
+
+    if (!verificarMassaEscolhida(M2, massaEscolhidaB)) {
+        return 0;
+    }
+
+    // 4. Dissipacao de energia de C a D para atingir energia necessaria em D
+    double alturaE = alturas[4]; // Altura do ponto E
+    double energiaFinalD = M2 * GRAVIDADE * alturaE; // Energia necessaria no ponto D para atingir E
+    printf("Energia necessaria no ponto D para alcancar o ponto E: %.2f J\n\n", energiaFinalD);
 
     double energiaDissipadaCD = energiaTotalB - energiaFinalD;
     printf("Energia a ser dissipada entre C e D: %.2f J\n\n", energiaDissipadaCD);
 
-    // 5. Ajustes de massa para E a F e F a G (baseados nas alturas e energia necessária)
-    double alturaG = alturas[7];
+    // 5. Calculo do coeficiente de atrito entre C e D
+    double coeficienteAtritoCD = calcularCoeficienteAtrito(energiaDissipadaCD, M2);
+    printf("Coeficiente de atrito necessario entre C e D: %.2f\n", coeficienteAtritoCD);
+
+    // 6. Ajustes de massa para E a F e F a G (baseados nas alturas e energia necessaria)
+    double alturaG = alturas[6];
 
     // Energia em E: ajustar massa para chegar em F
     double energiaCinE = 0.5 * M2 * v_2f * v_2f;
     M2 = calcularMassaAjustada(energiaCinE, alturaE);
-    printf("Massa ajustada para alcançar o ponto E: %.2f kg\n\n", M2);
+    //printf("Massa ajustada para alcancar o ponto E: %.2f kg\n\n", M2);
 
-    // Energia em G: ajustar massa para chegar ao ponto com velocidade nula
-    double energiaCinG = 0.5 * M2 * v_2f * v_2f;
-    M2 = calcularMassaAjustada(energiaCinG, alturaG);
-    printf("Massa ajustada para alcançar o ponto G: %.2f kg\n\n", M2);
+    // Entrada da massa escolhida pelo jogador no ponto F
+    double massaEscolhidaF;
+    printf("Escolha a massa para o ponto F (intervalo permitido: %.2f kg a %.2f kg): ",
+           M2 * 0.7, M2 * 1.3);
+    scanf("%lf", &massaEscolhidaF);
 
-    // 6. Parada entre H e I - calcular força para dissipar toda energia cinética restante
+    if (!verificarMassaEscolhida(M2, massaEscolhidaF)) {
+        return 0;
+    }
+
+    // 7. Parada entre H e I - calcular forca para dissipar toda energia cinetica restante
     double energiaCinH = 0.5 * M2 * v_2f * v_2f;
     double distanciaHI = 3 * altura_ini;
     double forcaResistenciaHI = energiaCinH / distanciaHI;
-    printf("Força de resistência necessária entre H e I para parar: %.2f N\n", forcaResistenciaHI);
+    printf("Forca de resistencia necessaria entre H e I para parar: %.2f N\n", forcaResistenciaHI);
+
+    printf("Parabens! Voce concluiu o trajeto com sucesso.\n");
 
     return 0;
 }
