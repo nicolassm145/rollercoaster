@@ -1,3 +1,7 @@
+// Exercicio 3 - CMAC04
+// Felipe Alves Gregorio - 2022008250
+// Nícolas de Souza Moreira - 2022014472
+
 #include <stdio.h>
 #include <math.h>
 

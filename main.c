@@ -1,3 +1,7 @@
+// Exercicio 3 - CMAC04
+// Felipe Alves Gregorio - 2022008250
+// Nícolas de Souza Moreira - 2022014472
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -28,7 +32,7 @@ float massaNecessaria(float massa_atual, float altura_atual, float altura_prox, 
 
     // Calcula a energia necessária para alcançar a próxima altura
     float energia_necessaria = energia_potencial_prox - calcular_energia_potencial(massa_atual, altura_atual);
-    
+
     // Se a energia cinética atual for maior ou igual à energia necessária, não precisamos ajustar a massa
     if (energia_cinetica_atual >= energia_necessaria) {
         return massa_atual; // Retorna a massa atual, pois não há necessidade de mudança
