@@ -1,37 +1,72 @@
 # Jogo do Carrinho
 
 ## Descrição
-O "Jogo do Carrinho" é um jogo interativo em C onde o jogador deve manipular a massa, a gravidade e a força para guiar um carrinho por um trilho. O objetivo é calcular corretamente as propriedades físicas para que o carrinho consiga passar por diferentes pontos de altura ao longo do percurso. O jogo oferece feedback ao jogador sobre suas escolhas, informando qual seria a opção correta em caso de erro.
 
-## Funcionalidades
-- Alteração da massa do carrinho para alcançar diferentes pontos de altura.
-- Ajuste da gravidade ao longo do percurso.
-- Cálculo da energia cinética e potencial em diferentes pontos.
-- Feedback ao jogador quando uma escolha incorreta é feita, com a opção de jogar novamente ou sair do jogo.
+O "Jogo do Carrinho" é uma simulação interativa em C, onde o jogador manipula a massa, a gravidade e a força para guiar um carrinho por uma "montanha-russa" virtual. O objetivo é calcular corretamente as propriedades físicas, como massa e gravidade, em pontos específicos para que o carrinho consiga passar por diferentes alturas ao longo do percurso. Em cada etapa, o jogo fornece feedback sobre as escolhas, indicando o valor correto em caso de erro.
+
+## Componentes e Tecnologias
+
+- **Linguagem de Programação**: C
+- **Compilador**: GCC
+- **Conceitos Físicos**: Conservação de Energia e Colisões Elásticas
+- **Mecânicas do Jogo**: Ajuste de massa e gravidade em pontos específicos do trajeto para garantir o movimento do carrinho.
+
+## Estrutura do Código
+
+O código é dividido em funções que realizam os cálculos de energia cinética e potencial, e verifica os valores de massa, gravidade e força escolhidos pelo jogador. Ele utiliza um loop para permitir múltiplas jogadas, onde o jogador precisa ajustar os parâmetros físicos para guiar o carrinho.
 
 ## Como Jogar
-1. Clone este repositório em sua máquina local:
-   ```bash
-   git clone https://github.com/seu_usuario/jogo-do-carrinho.git
-   cd jogo-do-carrinho
-2. Compile o código-fonte:
-   ```bash
-   gcc jogo_do_carrinho.c -o jogo_do_carrinho -lm
 
-4. Execute o jogo:
+1. **Clone o repositório** para sua máquina local:
    ```bash
-   ./jogo_do_carrinho
-   
-## Estrutura do Código
-  O código é escrito em C e utiliza funções para cálculos de física.
-  O jogo utiliza um loop while para permitir múltiplas jogadas.
-  As entradas do jogador são utilizadas para calcular a massa e a gravidade necessárias em diferentes pontos do percurso.
-  Tecnologias Usadas
-  Linguagem de programação: C
-  Compilador: GCC
-## Contribuições
-  Sinta-se à vontade para contribuir com melhorias e correções.
-  ### Instruções para Usar
-1. **Clone o Repositório:** Use o comando de clone para baixar o repositório para sua máquina local.
-2. **Compile e Execute:** Siga as instruções para compilar e executar o jogo.
-3. **Contribuições:** Indique como outros podem contribuir para o projeto.
+   git clone https://github.com/nicolassm145/rollercoaster.git
+   cd rollercoaster
+   ```
+
+2. **Compile o código-fonte**:
+   ```bash
+   gcc main.c -o main -lm
+   ```
+
+3. **Execute o jogo**:
+   ```bash
+   ./main
+   ```
+
+4. **Instruções do Jogo**:
+   - Escolha valores de massa, gravidade e força em pontos específicos para guiar o carrinho pela montanha-russa.
+   - O objetivo é calcular corretamente as variáveis para que o carrinho alcance cada ponto de altura no percurso.
+   - Ao fazer escolhas erradas, o jogo fornecerá o valor correto e permitirá uma nova tentativa ou encerramento.
+
+## Funcionalidades
+
+- **Alteração da Massa**: Permite ajustar a massa do carrinho para diferentes trechos.
+- **Ajuste da Gravidade**: O jogador define a gravidade aplicada em determinados trechos para controlar a energia do carrinho.
+- **Cálculo das Energias**: O jogo exibe as energias cinética e potencial em diferentes pontos do trajeto.
+- **Feedback ao Jogador**: O jogo informa sobre a precisão das escolhas e sugere o valor correto em caso de erro.
+
+## Créditos
+Este projeto foi desenvolvido por:
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/nicolassm145">
+        <img src="https://avatars.githubusercontent.com/u/131420329?v=4" alt="Nícolas de Souza Moreira" style="width: 150px"><br>
+        <p><strong>Nícolas de Souza Moreira</strong></p>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/flp-gregorio">
+        <img src="https://avatars.githubusercontent.com/u/113314823?v=4" alt="Felipe Alves Gregorio" style="width: 150px"><br>
+        <p><strong>Felipe Alves Gregorio</strong></p>
+      </a>
+    </td>
+  </tr>
+</table>
+
+## Considerações Finais
+
+Este jogo é uma oportunidade para aplicar conceitos de física em uma simulação prática e interativa. Sinta-se à vontade para contribuir com melhorias e explorar diferentes configurações para o trajeto do carrinho.
+
+--- 
