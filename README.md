@@ -53,7 +53,7 @@ Este projeto foi desenvolvido por:
     <td align="center">
       <a href="https://github.com/nicolassm145">
         <img src="https://avatars.githubusercontent.com/u/131420329?v=4" alt="Nícolas de Souza Moreira" style="width: 150px"><br>
-        <p><strong>Nícolas de Souza Moreira</strong></p>
+        <p><strong>Nícolas de Souza</strong></p>
       </a>
     </td>
     <td align="center">
